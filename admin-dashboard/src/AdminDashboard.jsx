@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { TextField } from "@mui/material";
 import accountData from "./accounts.json";
 import AccountCard from "./AccountCard";
@@ -7,7 +7,6 @@ import History from "./History";
 
 function AdminDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState(null);
   const [history, setHistory] = useState([])
 
@@ -17,16 +16,18 @@ function AdminDashboard() {
   }
 
   function handleSearch(newSearch) {
-    setSearchQuery(newSearch);
-    if (newSearch) {
-      const results = accountData.accounts.filter((account) =>
-        account.email.includes(searchQuery)
-      );
-      setSearchResults(results);
-    } else {
-      setSearchResults([]);
-    }
+    setSearchQuery(newSearch)
   }
+
+   // Added useMemo to filter search results when searchQuery changes:
+   const searchResults = useMemo(() => {
+    if (searchQuery) {
+      return accountData.accounts.filter((account) =>
+        account.email.includes(searchQuery)
+      )
+    }
+    return [];
+  }, [searchQuery])
 
   return (
     <>
@@ -51,6 +52,7 @@ function AdminDashboard() {
         </div>
       </div>
     </>
-  );
+  )
 }
-export default AdminDashboard;
+
+export default AdminDashboard
