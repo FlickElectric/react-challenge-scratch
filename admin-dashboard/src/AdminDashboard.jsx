@@ -38,7 +38,7 @@ function AdminDashboard() {
         />
         <div className="results-container">
           <div className="results-left">
-            {searchResults?.map((account, i) => (
+            {searchResults.length > 0 && searchResults.map((account, i) => (
               <AccountCard key={i} account={account} handleSelect={handleSelect}/>
             ))}
           </div>
